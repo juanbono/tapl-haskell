@@ -1,0 +1,3 @@
+:set prompt ""
+:set -fobject-code
+:set prompt "\4 "
