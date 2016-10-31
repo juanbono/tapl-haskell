@@ -1,6 +1,8 @@
 module Language.Arith.Syntax
   (
     Term (..)
+  , isNumericalVal
+  , isVal
   ) where
 
 data Term = TmTrue
@@ -26,3 +28,13 @@ instance Show Term where
   show (TmPred t) = "pred " ++ "(" ++ show t ++ ")"
   show (TmIsZero t) = "iszero " ++ "(" ++ show t ++ ")"
 
+-- Funciones auxiliares
+isNumericalVal :: Term -> Bool
+isNumericalVal TmZero = True
+isNumericalVal (TmSucc t) = isNumericalVal t
+isNumericalVal _ = False
+
+isVal :: Term -> Bool
+isVal TmTrue = True
+isVal TmFalse = True
+isVal t = isNumericalVal t
