@@ -4,6 +4,7 @@ module REPL
   ) where
 
 import Language.Arith.Syntax
+import Language.Arith.Eval
 import Language.Arith.Parser (parseString)
 import System.Console.Repline
 import Rainbow
@@ -15,7 +16,7 @@ import Control.Monad.IO.Class
 type Repl a = HaskelineT IO a
 
 cmd :: String -> Repl ()
-cmd = liftIO . print . parseString
+cmd = liftIO . putChunkLn . chunk . parseString
 
 completer :: Monad m => WordCompleter m
 completer n = do
@@ -24,7 +25,10 @@ completer n = do
   return $ filter (isPrefixOf n) keywords
 
 help :: [String] -> Repl ()
-help args = liftIO $ print $ "Help: " ++ show args
+help args = liftIO $ putChunkLn . chunk  $ "Help: " ++ show args
+
+singleStepEvaluation :: [String] -> Repl ()
+singleStepEvaluation = undefined
 
 options :: [(String, [String] -> Repl ())]
 options = [
@@ -36,3 +40,5 @@ ini = liftIO $ putStrLn "Arith: arithmetical and boolean expressions"
 
 repl :: IO ()
 repl = evalRepl "Arith> " cmd options (Word completer) ini
+
+main = repl

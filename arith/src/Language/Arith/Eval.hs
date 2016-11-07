@@ -1,14 +1,15 @@
 module Language.Arith.Eval
   (
-    singleStepEvaluator
+    Evaluator (..)
+  , singleStepEvaluator
   , bigStepEvaluator
   , eval
   ) where
 
 import Language.Arith.Syntax
 
-data Evaluator = SingleStepEval (Term -> Maybe Term)
-               | BigStepEval (Term -> Maybe Term)
+data Evaluator = SingleStepEval { evalFunction :: Term -> Maybe Term }
+               | BigStepEval { evalFunction :: Term -> Maybe Term }
 
 singleStepEvaluator :: Evaluator
 singleStepEvaluator = SingleStepEval eval1
