@@ -1,17 +1,14 @@
 module Language.Arith.Parser
   (
-    parseString
+   parseString
   ) where
 
 import Language.Arith.Syntax
 import Language.Arith.Lexer
 import Text.ParserCombinators.Parsec
 
-parseString :: String -> String
-parseString input
-  = case parse parseExpr "" input of
-      Left err -> show err
-      Right t -> show t
+parseString :: String -> Either ParseError Term
+parseString = parse parseExpr ""
 
 parseExpr :: Parser Term
 parseExpr = parens parseExpr

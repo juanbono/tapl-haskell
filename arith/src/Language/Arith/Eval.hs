@@ -1,23 +1,12 @@
 module Language.Arith.Eval
   (
-    Evaluator (..)
-  , singleStepEvaluator
-  , bigStepEvaluator
+    small
+  , multi
+  , big
   ) where
 
 import Language.Arith.Syntax
-import Control.Monad
-data Evaluator = SingleStepEval { evalFunction :: Term -> Maybe Term }
-               | BigStepEval { evalFunction :: Term -> Maybe Term }
-
-singleStepEvaluator :: Evaluator
-singleStepEvaluator = SingleStepEval small
-
-multiStepEvaluator :: Evaluator
-multiStepEvaluator = SingleStepEval multi
-
-bigStepEvaluator :: Evaluator
-bigStepEvaluator = BigStepEval big
+import Control.Monad ((<=<))
 
 -- | small documentation
 small :: Term -> Maybe Term
@@ -94,4 +83,3 @@ big (TmIsZero t1)
 -- B-Value
 big t | isVal t   = Just t
       | otherwise = Nothing
-
