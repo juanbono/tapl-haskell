@@ -30,9 +30,18 @@ help args = liftIO $ putChunkLn . chunk  $ "Help: " ++ show args
 singleStepEvaluation :: [String] -> Repl ()
 singleStepEvaluation = undefined
 
+multiStepEvaluation :: [String] -> Repl ()
+multiStepEvaluation = undefined
+
+bigStepEvaluation :: [String] -> Repl ()
+bigStepEvaluation = undefined
+
 options :: [(String, [String] -> Repl ())]
 options = [
-  ("help", help)
+  ("help", help),
+  ("small", singleStepEvaluation),
+  ("multi", multiStepEvaluation),
+  ("big", bigStepEvaluation)
   ]
 
 ini :: Repl ()
