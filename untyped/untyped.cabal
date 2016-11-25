@@ -1,8 +1,8 @@
-name:                arith
+name:                untyped
 version:             0.1.0.0
 synopsis:            Initial project template from stack
 description:         Please see README.md
-homepage:            https://github.com/juanbono/arith#readme
+homepage:            https://github.com/juanbono/untyped#readme
 license:             BSD3
 license-file:        LICENSE
 author:              Juan Bono
@@ -15,34 +15,33 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     Language.Arith.Parser
-                     , Language.Arith.Lexer
-                     , Language.Arith.Syntax
-                     , Language.Arith.Eval
+  exposed-modules:     Language.Untyped.Parser
+                     , Language.Untyped.Lexer
+                     , Language.Untyped.Syntax
+                     , Language.Untyped.Eval
   build-depends:       base >= 4.7 && < 5
-                     , parsec >= 3.1.10
+                     , megaparsec >= 4.0.0
                      , repline >= 0.1.4.0
                      , rainbow >= 0.28.0.0
   default-language:    Haskell2010
 
-executable arith-exe
+executable untyped-exe
   hs-source-dirs:      app
   main-is:             Main.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
-                     , arith
+                     , untyped
   default-language:    Haskell2010
 
-test-suite arith-test
+test-suite untyped-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
   build-depends:       base
-                     , arith
-                     , QuickCheck
+                     , untyped
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010
 
 source-repository head
   type:     git
-  location: https://github.com/juanbono/tapl-haskell/arith
+  location: https://github.com/juanbono/tapl-haskell/untyped
