@@ -19,6 +19,7 @@ library
                      , Language.Untyped.Lexer
                      , Language.Untyped.Syntax
                      , Language.Untyped.Eval
+                     , REPL
   build-depends:       base >= 4.7 && < 5
                      , megaparsec >= 4.0.0
                      , repline >= 0.1.4.0

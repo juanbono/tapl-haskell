@@ -3,15 +3,15 @@ module REPL
     repl
   ) where
 
-import Language.Arith.Syntax
-import Language.Arith.Eval
-import Language.Arith.Parser (parseString)
-import System.Console.Repline
-import Rainbow
-import Data.List (isPrefixOf)
-import Data.List (isPrefixOf)
-import Control.Applicative
-import Control.Monad.IO.Class
+import           Control.Applicative
+import           Control.Monad.IO.Class
+import           Data.List              (isPrefixOf)
+import           Data.List              (isPrefixOf)
+import           Language.Arith.Eval
+import           Language.Arith.Parser  (parseString)
+import           Language.Arith.Syntax
+import           Rainbow
+import           System.Console.Repline
 
 type Repl a = HaskelineT IO a
 
@@ -34,13 +34,15 @@ completer n = do
   return $ filter (isPrefixOf n) keywords
 
 help :: [String] -> Repl ()
-help args = liftIO $ putChunkLn . chunk  $ "Help: " ++ show args
+help _ = liftIO $ putChunkLn . chunk  $ "Help: " ++ show helpText
+  where
+    helpText = "Some help"
 
 evalWith :: (Term -> Maybe Term) -> [String] -> Repl ()
 evalWith f = cmdWith (printTerm . f) (fore green) . unwords
 
 printTerm :: Maybe Term -> String
-printTerm (Just t) = show t
+printTerm (Just t)  = show t
 printTerm (Nothing) = "*** Stuck ***"
 
 options :: [(String, [String] -> Repl ())]

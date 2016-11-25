@@ -19,6 +19,7 @@ library
                      , Language.Arith.Lexer
                      , Language.Arith.Syntax
                      , Language.Arith.Eval
+                     , REPL
   build-depends:       base >= 4.7 && < 5
                      , parsec >= 3.1.10
                      , repline >= 0.1.4.0
