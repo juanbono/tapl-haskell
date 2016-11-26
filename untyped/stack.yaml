@@ -3,5 +3,6 @@ extra-package-dbs: []
 packages:
 - '.'
 extra-deps:
+- ncurses-0.2.16
 - repline-0.1.5.0
 resolver: lts-7.10

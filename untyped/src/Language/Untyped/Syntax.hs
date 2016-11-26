@@ -1,1 +1,15 @@
-module Language.Untyped.Syntax where
+module Language.Untyped.Syntax
+  (
+    Term (..)
+  , Info (..)
+  ) where
+
+data Term
+  = TmVar Info Int Int
+  | TmAbs Info String Term
+  | TmApp Info Term Term
+  deriving (Show)
+
+data Info
+  = Info { row :: Int, col :: Int }
+  deriving (Show)
