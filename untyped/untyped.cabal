@@ -26,6 +26,7 @@ library
                      , repline >= 0.1.4.0
                      , rainbow >= 0.28.0.0
                      , ncurses >= 0.2.10
+                     , printcess >= 0.1.0.0
   default-language:    Haskell2010
 
 executable untyped-exe

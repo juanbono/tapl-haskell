@@ -11,7 +11,9 @@ module Language.Untyped.Context
   , emptyContext
   , showTerm
   ) where
-import Language.Untyped.Syntax
+
+import           Language.Untyped.Syntax
+import           Printcess.PrettyPrinting
 
 type Name = String
 data Binding
@@ -58,9 +60,9 @@ showTerm ctx (TmApp _ t1 t2)
 
 termMap :: Num t => (Info -> t -> Int -> Int -> Term) -> t -> Term -> Term
 termMap onvar c t
-  = let walk c (TmVar info index n) = onvar info c index n
+  = let walk c (TmVar info index n)   = onvar info c index n
         walk c (TmAbs info name term) = TmAbs info name (walk (c + 1) term)
-        walk c (TmApp info t1 t2) = TmApp info (walk c t1) (walk c t2)
+        walk c (TmApp info t1 t2)     = TmApp info (walk c t1) (walk c t2)
     in walk c t
 
 termShiftAbove :: Int -> Int -> Term -> Term

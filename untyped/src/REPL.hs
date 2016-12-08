@@ -2,26 +2,30 @@ module REPL
   (
     repl
   ) where
+
 import           Control.Applicative
 import           Control.Monad.IO.Class
-import           Data.List              (isPrefixOf)
-import           Data.List              (isPrefixOf)
-import           Language.Untyped.Eval
+import           Data.List                (isPrefixOf)
+import           Data.List                (isPrefixOf)
 import           Language.Untyped.Context
-import           Language.Untyped.Parser  (parseString)
+import           Language.Untyped.Eval
+import           Language.Untyped.Parser  (parseString, parseTerm)
 import           Language.Untyped.Syntax
 import           Rainbow
 import           System.Console.Repline
+import           Text.Parsec
 
 type Repl a = HaskelineT IO a
 
 cmdWith ::
   Show b => (Term -> b) -> (Chunk String -> Chunk String) -> String -> Repl ()
 cmdWith f g input =
-  let msg = case parseString input of
-              Left err -> chunk (show err) & fore red
-              Right t  -> (g . chunk . showTerm []) t
-  in
+  do
+    let ctx = emptyContext
+        parsedString = runParser parseTerm ctx "" input
+        msg = case parsedString of
+                 Left err -> chunk (show err) & fore red
+                 Right t  -> (g . chunk . showTerm ctx) t
     liftIO $ putChunkLn msg
 
 cmd :: String -> Repl ()
