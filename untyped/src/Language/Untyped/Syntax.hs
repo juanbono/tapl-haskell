@@ -4,8 +4,6 @@ module Language.Untyped.Syntax
   , Info (..)
   ) where
 
-import           Printcess.PrettyPrinting
-
 data Term
   = TmVar Info Int Int
   | TmAbs Info String Term

@@ -14,18 +14,24 @@ import           Language.Untyped.Syntax
 import           Rainbow
 import           System.Console.Repline
 import           Text.Parsec
+import           Printcess.PrettyPrinting
+import           Language.Untyped.PrettyPrinting
 
 type Repl a = HaskelineT IO a
 
-cmdWith ::
-  Show b => (Term -> b) -> (Chunk String -> Chunk String) -> String -> Repl ()
+cmdWith
+  :: Show b
+  => (Term -> b)
+  -> (Chunk String -> Chunk String)
+  -> String
+  -> Repl ()
 cmdWith f g input =
   do
     let ctx = emptyContext
         parsedString = runParser parseTerm ctx "" input
         msg = case parsedString of
                  Left err -> chunk (show err) & fore red
-                 Right t  -> (g . chunk . showTerm ctx) t
+                 Right t  -> (g . chunk . pretty defConfig . showTerm ctx) t
     liftIO $ putChunkLn msg
 
 cmd :: String -> Repl ()
@@ -46,7 +52,7 @@ evalWith :: (Term -> Maybe Term) -> [String] -> Repl ()
 evalWith f = cmdWith (printTerm . f) (fore green) . unwords
 
 printTerm :: Maybe Term -> String
-printTerm (Just t)  = showTerm [] t
+printTerm (Just t)  = pretty defConfig $ showTerm [] t -- arreglar
 printTerm (Nothing) = "*** Stuck ***"
 
 options :: [(String, [String] -> Repl ())]

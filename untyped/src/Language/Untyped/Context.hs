@@ -9,15 +9,17 @@ module Language.Untyped.Context
   , toIndex
   , fromIndex
   , emptyContext
-  , showTerm
+  , pickFreshName
   ) where
 
 import           Language.Untyped.Syntax
-import           Printcess.PrettyPrinting
 
 type Name = String
+
 data Binding
-  = NameBind deriving (Show)
+  = NameBind
+  deriving (Show)
+
 type Context = [(Name, Binding)]
 
 emptyContext :: Context
@@ -47,16 +49,6 @@ toIndex [] x = error ("Identifier " ++ x ++ " is unbound.")
 toIndex ((y, _):rest) x
   | x == y    = 0
   | otherwise = 1 + (toIndex rest x)
-
-showTerm :: Context -> Term -> String
-showTerm ctx (TmVar _ index n)
-  | length ctx == n = fromIndex ctx index
-  | otherwise = "Error: bad index"
-showTerm ctx (TmAbs _ name term)
-  = let (ctx', name') = pickFreshName ctx name
-    in "(λ" ++ name' ++ "." ++ showTerm ctx' term ++ ")"
-showTerm ctx (TmApp _ t1 t2)
-  = "(" ++ showTerm ctx t1 ++ " " ++ showTerm ctx t2 ++ ")"
 
 termMap :: Num t => (Info -> t -> Int -> Int -> Term) -> t -> Term -> Term
 termMap onvar c t

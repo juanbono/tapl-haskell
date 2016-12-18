@@ -20,6 +20,7 @@ library
                      , Language.Untyped.Syntax
                      , Language.Untyped.Eval
                      , Language.Untyped.Context
+		     , Language.Untyped.PrettyPrinting
                      , REPL
   build-depends:       base >= 4.7 && < 5
                      , parsec >= 3.1.10
