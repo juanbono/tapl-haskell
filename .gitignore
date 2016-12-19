@@ -16,6 +16,8 @@ cabal.sandbox.config
 *.hp
 *.eventlog
 .stack-work/
+/*/.stack-work/
+/*/.history
 cabal.project.local
 arith/.stack-work/
 untyped/.stack-work/
