@@ -1,3 +1,11 @@
+{-|
+Module      : Language.Untyped.Context
+Description : Definition of the Context of evaluation and some useful functions.
+Copyright   : (c) Juan Gabriel Bono, 2016
+License     : BSD3
+Maintainer  : juanbono94@gmail.com
+
+-}
 module Language.Untyped.Context
   (
     Context
@@ -10,31 +18,42 @@ module Language.Untyped.Context
   , fromIndex
   , emptyContext
   , pickFreshName
+  , termSubstTop
   ) where
 
 import           Language.Untyped.Syntax
 
+-- | Just an alias for 'String'
 type Name = String
 
+-- | It doesn't carry any useful information.
 data Binding
   = NameBind
   deriving (Show)
 
+-- | It's represented by a list of names and associated bindings.
 type Context = [(Name, Binding)]
 
+-- | An empty context.
 emptyContext :: Context
 emptyContext = []
 
+-- | Appends the ('Name', 'Binding') tuple to the 'Context'.
 addBinding :: Context -> Name -> Binding -> Context
 addBinding ctx x bind = (x, bind) : ctx
 
+-- | Adds a 'Name' to a given 'Context'
 addName :: Context -> Name -> Context
 addName ctx name = addBinding ctx name NameBind
 
+-- | Applies a function to the given context and returns another context.
+modifyContext :: (Context -> Context) -> Context -> Context
 modifyContext f ctx = f ctx
 
+-- | Checks if a given 'Name' is bound within a 'Context'.
 isNameBound :: Context -> Name -> Bool
 isNameBound ctx name = elem name . map fst $ ctx
+
 
 pickFreshName :: Context -> Name -> (Context, Name)
 pickFreshName ctx x

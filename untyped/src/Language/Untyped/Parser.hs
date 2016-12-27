@@ -11,7 +11,8 @@ import           Language.Untyped.Lexer
 import           Language.Untyped.Syntax
 import           Text.Parsec
 
-type Parser a = ParsecT String Context Identity a
+-- | Parser type who uses String as Stream Type and Context as State.
+type Parser = Parsec String Context
 
 parseTerm :: Parser Term
 parseTerm
@@ -25,7 +26,6 @@ parseNonApp
  <|> parseAbs
  <|> parens parseTerm
 
-
 parseVar :: Parser Term
 parseVar = do
   var <- identifier
@@ -33,19 +33,6 @@ parseVar = do
   info <- infoFrom <$> getPosition
   let idx = toIndex ctx var
   return $ TmVar info idx (length ctx)
-{-
-parseAbs :: Parser Term
-parseAbs = do
-  char '\\' <|> char 'λ'
-  v <- identifier
-  dot
-  modifyState (\c -> addName c v)
-  term <- parseTerm
-  modifyState tail
-  pos <- getPosition
-  return $ TmAbs (infoFrom pos) v term
--}
-
 
 parseAbs :: Parser Term
 parseAbs = do
@@ -63,4 +50,15 @@ infoFrom :: SourcePos -> Info
 infoFrom pos = Info (sourceLine pos) (sourceColumn pos)
 
 parseString :: String -> Either ParseError Term
-parseString  = runParser parseTerm emptyContext ""
+parseString = runParser parseTerm emptyContext ""
+
+-- tests
+v1, v2, v3, v4 :: String
+
+v1 = "\\x.x"
+
+v2 = "(\\x.x) x"
+
+v3 = "(\\x . (\\y. y) x)"
+
+v4 = "(\\x. (\\y.y) t)"

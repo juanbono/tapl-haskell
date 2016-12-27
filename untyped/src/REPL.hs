@@ -58,7 +58,8 @@ printTerm (Nothing) = "*** Stuck ***"
 options :: [(String, [String] -> Repl ())]
 options = [
   ("help", help),
-  ("q", const abort)
+  ("q", const abort),
+  ("single", evalWith $ multi emptyContext)
   ]
 
 ini :: Repl ()
