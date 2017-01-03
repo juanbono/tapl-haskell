@@ -16,9 +16,7 @@ type Parser = Parsec String Context
 
 parseTerm :: Parser Term
 parseTerm
-  = chainl1 parseNonApp $ do
-  info <- infoFrom <$> getPosition
-  return $ TmApp info
+  = chainl1 parseNonApp $ return TmApp
 
 parseNonApp :: Parser Term
 parseNonApp
@@ -30,9 +28,12 @@ parseVar :: Parser Term
 parseVar = do
   var <- identifier
   ctx <- getState
-  info <- infoFrom <$> getPosition
-  let idx = toIndex ctx var
-  return $ TmVar info idx (length ctx)
+ -- setState $ addName ctx var
+  newCtx <- getState
+  let idx = toIndex newCtx var
+  case idx of
+    Left e  -> error $ show e
+    Right i -> return $ TmVar i (length newCtx)
 
 parseAbs :: Parser Term
 parseAbs = do
@@ -43,22 +44,15 @@ parseAbs = do
   setState $ addName ctx v
   term <- parseTerm
   setState ctx
-  info <- infoFrom <$> getPosition
-  return $ TmAbs info v term
-
-infoFrom :: SourcePos -> Info
-infoFrom pos = Info (sourceLine pos) (sourceColumn pos)
+  return $ TmAbs v term
 
 parseString :: String -> Either ParseError Term
 parseString = runParser parseTerm emptyContext ""
 
 -- tests
-v1, v2, v3, v4 :: String
+v2, v3, v4 :: String
+v2 = "(\\x.x) x" -- da bien creo, hacer cuentas
 
-v1 = "\\x.x"
+v3 = "(\\x . (\\y. y) x)" -- da bien
 
-v2 = "(\\x.x) x"
-
-v3 = "(\\x . (\\y. y) x)"
-
-v4 = "(\\x. (\\y.y) t)"
+v4 = "(\\x. (\\y.y) t)" -- tira error, pero esta bien :D

@@ -3,7 +3,13 @@ extra-package-dbs: []
 packages:
 - '.'
 extra-deps:
+- annihilator-0.1.0.0
+- hspec-2.3.2
+- hspec-core-2.3.2
+- hspec-discover-2.3.2
+- hspec-expectations-0.8.2
 - ncurses-0.2.16
-- repline-0.1.5.0
 - printcess-0.1.0.2
-resolver: lts-7.10
+- repline-0.1.5.0
+- tasty-discover-1.0.1
+resolver: lts-7.14
