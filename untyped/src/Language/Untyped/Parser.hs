@@ -33,7 +33,7 @@ parseVar = do
   let idx = toIndex newCtx var
   case idx of
     Left e  -> error $ show e
-    Right i -> return $ TmVar i (length newCtx)
+    Right i -> return $ TmVar i
 
 parseAbs :: Parser Term
 parseAbs = do

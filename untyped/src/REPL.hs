@@ -6,7 +6,6 @@ module REPL
 import           Control.Applicative
 import           Control.Monad.IO.Class
 import           Data.List                (isPrefixOf)
-import           Data.List                (isPrefixOf)
 import           Language.Untyped.Context
 import           Language.Untyped.Eval
 import           Language.Untyped.Parser  (parseString, parseTerm)
@@ -48,12 +47,11 @@ help _ = liftIO $ putChunkLn . chunk  $ "Help: " ++ show helpText
   where
     helpText = "Some help"
 
-evalWith :: (Term -> Maybe Term) -> [String] -> Repl ()
+evalWith :: (Term -> Term) -> [String] -> Repl ()
 evalWith f = cmdWith (printTerm . f) (fore green) . unwords
 
-printTerm :: Maybe Term -> String
-printTerm (Just t)  = pretty defConfig $ showTerm [] t -- arreglar
-printTerm (Nothing) = "*** Stuck ***"
+printTerm :: Term -> String
+printTerm t = pretty defConfig $ showTerm [] t -- arreglar
 
 options :: [(String, [String] -> Repl ())]
 options = [

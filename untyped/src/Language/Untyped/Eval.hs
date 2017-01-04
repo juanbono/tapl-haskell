@@ -7,38 +7,50 @@ module Language.Untyped.Eval
 
 import Language.Untyped.Syntax
 import Language.Untyped.Context
+import qualified Language.Untyped.Church as Church
+import Language.Untyped.PrettyPrinting -- testing
+import Printcess.PrettyPrinting
 
 isVal :: Context -> Term -> Bool
 isVal _ (TmAbs _ _) = True
 isVal _ _ = False
 
-small :: Context -> Term -> Maybe Term
-small ctx (TmApp (TmAbs x t12) v2)
-  | isVal ctx v2 = Just $ termSubstTop v2 t12
-small ctx (TmApp v1 t2)
-  | isVal ctx v1 = case small ctx t2 of
-                     Just t2' -> Just $ TmApp v1 t2'
-                     Nothing -> Nothing
+small :: Context -> Term -> Term
 small ctx (TmApp t1 t2)
-  = case small ctx t1 of
-      Just t1' -> Just $ TmApp t1' t2
-      Nothing -> Nothing
-small _ _ = Nothing
+  -- E-AppAbs
+  | isVal ctx t2 = let (TmAbs _ t12) = t1
+                   in termSubstTop t2 t12
+  -- E-App2
+  | isVal ctx t1 = let t2' = small ctx t2
+                   in TmApp t1 t2'
+  -- E-App1
+  | otherwise    = let t1' = small ctx t1
+                   in TmApp t1' t2
+small _ t = t
 
-multi :: Context -> Term -> Maybe Term
-multi ctx t = do
-  t' <- small ctx t
-  multi ctx t'
+multi :: Context -> Term -> Term
+multi ctx t = let t' = small ctx t in small ctx t'
+e = TmApp (TmApp (TmAbs "t" (TmAbs "f" (TmVar 0))) (TmAbs "t" (TmAbs "f" (TmVar 0)))) (TmAbs "t" (TmAbs "f" (TmVar 1)))
 
 big :: Context -> Term -> Maybe Term
 big = undefined
 
--- tests
-v1, v2, v3, v4 :: Term
-v1 = undefined
+-- funciones bugueadas pero utiles para testear (?)
+bindings :: Term -> Context
+bindings (TmVar _) = []
+bindings (TmAbs b t1) = (b, NameBind) : bindings t1
+bindings (TmApp t1 t2) = bindings t1 ++ bindings t2
 
-v2 = undefined
+eval1 :: Term -> Term
+eval1 t = small (bindings t) t
 
-v3 = undefined
+eval2 :: Term -> Term
+eval2 t = multi (bindings t) t
 
-v4 = undefined
+evalAndPrint1 :: Term -> String
+evalAndPrint1 t = let term = eval1 t
+                 in (pretty defConfig . showTerm emptyContext) term
+
+evalAndPrint2 :: Term -> String
+evalAndPrint2 t = let term = eval2 t
+                 in (pretty defConfig . showTerm (bindings term)) term
