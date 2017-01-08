@@ -8,15 +8,31 @@ Maintainer  : juanbono94@gmail.com
 -}
 module Language.Untyped.Syntax
   (
-    Term (..)
+    NamelessTerm (..)
   ) where
 
+import qualified Data.Set as Set
+
 -- | Data type for lambda terms
-data Term
+data NamelessTerm
   -- | Contains the De Brujin index of the variable
-  = TmVar Int
+  = NmVar Int
   -- | A String represents the bound variable within the term.
-  | TmAbs String Term
+  | NmAbs String NamelessTerm
   -- |  Reifies the application of one term to another.
-  | TmApp Term Term
+  | NmApp NamelessTerm NamelessTerm
   deriving (Show, Eq)
+
+data Term
+  = Var String
+  | Abs String Term
+  | App Term Term
+
+substitute :: String -> Term -> Term
+substitute name (Var _) = Var name
+substitute name  
+freeVars :: Term -> Set.Set String
+freeVars (Var name) = Set.singleton name
+freeVars (Abs name term) = freeVars term `Set.difference` Set.singleton name
+freeVars (App t1 t2) = freeVars t1 `Set.union` freeVars t2
+-- to test: |FV(t)| <= size(t)

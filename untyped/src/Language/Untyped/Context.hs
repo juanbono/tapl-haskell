@@ -12,7 +12,6 @@ module Language.Untyped.Context
   , CtxException (..)
   , Name
   , addName
-  , modifyContext
   , toIndex
   , fromIndex
   , emptyContext
@@ -61,11 +60,9 @@ addBinding ctx x bind = (x, bind) : ctx
 
 -- | Adds a 'Name' to a given 'Context'
 addName :: Context -> Name -> Context
-addName ctx name = addBinding ctx name NameBind
-
--- | Applies a function to the given context and returns another context.
-modifyContext :: (Context -> Context) -> Context -> Context
-modifyContext f = f
+addName ctx name = if isNameBound ctx name -- otra def addBinding ctx name NameBind
+                   then ctx
+                   else addBinding ctx name NameBind
 
 -- | Checks if a given 'Name' is bound within a 'Context'.
 isNameBound :: Context -> Name -> Bool
@@ -110,6 +107,7 @@ termShiftAbove d c term = termMap f c term
     f c x
       | x >= c = TmVar (x + d)
       | otherwise = TmVar x
+
 -- |
 termShift :: Int -> Term -> Term
 termShift d term = termShiftAbove d 0 term

@@ -4,17 +4,9 @@ module Language.Untyped.PrettyPrinting
   , toPP
   ) where
 
-import           Control.Annihilator
-import           Data.Monoid
 import           Language.Untyped.Context
 import           Language.Untyped.Syntax
 import           Printcess.PrettyPrinting
-
-data PPTerm
-  = PPVar String
-  | PPAbs String PPTerm
-  | PPApp PPTerm PPTerm
-  | PPBadTerm CtxException
 
 toPP :: Context -> Term -> PPTerm
 toPP ctx (TmVar index)

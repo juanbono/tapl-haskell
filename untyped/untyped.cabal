@@ -33,6 +33,7 @@ library
                      , safe-exceptions >= 0.1.3.0
                      , annihilator     == 0.1.0.0
                      , mtl             >= 2.2.0
+                     , containers
   default-language:    Haskell2010
 
 executable untyped-exe

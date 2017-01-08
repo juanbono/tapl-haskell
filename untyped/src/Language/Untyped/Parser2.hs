@@ -1,6 +1,7 @@
-module Parser2
+module Language.Untyped.Parser2
   ( parseTerm
   , parseString
+  , ParseResult (..)
   ) where
 
 import           Control.Monad
@@ -9,6 +10,7 @@ import           Language.Untyped.Context
 import           Language.Untyped.Lexer
 import           Language.Untyped.Syntax
 import           Text.Parsec
+import           Data.List
 
 -- | Parser type who uses String as Stream Type and Context as State.
 type Parser = ParsecT String Context Identity
@@ -20,7 +22,7 @@ data ParseResult
 
 parseTerm :: Parser ParseResult
 parseTerm = do
-  pr <- chainl1 parseNonApp $ return (\t1 t2 -> PR (TmApp (term t1) (term t2)) (ctx t1 ++ ctx t2))
+  pr <- chainl1 parseNonApp $ return (\t1 t2 -> PR (TmApp (term t1) (term t2)) (ctx t1 `union` ctx t2))
   let t = term pr
   ctx  <- getState
   return $ PR t ctx
@@ -35,9 +37,9 @@ parseVar :: Parser ParseResult
 parseVar = do
   var <- identifier
   ctx <- getState
-  -- setState $ addName ctx var
+  modifyState (`addName` var)
   newCtx <- getState
-  let idx = toIndex newCtx var
+  let idx = toIndex ctx var
   case idx of
     Left e  -> error $ show e
     Right i -> return $ PR (TmVar i) newCtx
