@@ -6,9 +6,9 @@ module Language.Untyped.Lexer
   , identifier
   ) where
 
-import qualified Text.Parsec.Token as T
-import Text.Parsec
-import Data.Functor.Identity
+import           Data.Functor.Identity
+import           Text.Parsec
+import qualified Text.Parsec.Token     as T
 
 languageDef
   = T.LanguageDef { T.commentStart = ""

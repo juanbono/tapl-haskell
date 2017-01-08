@@ -1,6 +1,5 @@
 module Language.Untyped.Parser
-  (
-    parseString
+  ( parseString
   , parseTerm
   ) where
 
@@ -12,7 +11,7 @@ import           Language.Untyped.Syntax
 import           Text.Parsec
 
 -- | Parser type who uses String as Stream Type and Context as State.
-type Parser = Parsec String Context
+type Parser = ParsecT String Context Identity
 
 parseTerm :: Parser Term
 parseTerm
@@ -27,8 +26,8 @@ parseNonApp
 parseVar :: Parser Term
 parseVar = do
   var <- identifier
-  ctx <- getState
- -- setState $ addName ctx var
+  --ctx <- getState
+  modifyState (`addName` var)
   newCtx <- getState
   let idx = toIndex newCtx var
   case idx of

@@ -1,6 +1,6 @@
 module Language.Untyped.Church where
 
-import Language.Untyped.Syntax
+import           Language.Untyped.Syntax
 
 -- Church Booleans
 fls :: Term

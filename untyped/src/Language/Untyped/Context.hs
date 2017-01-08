@@ -34,7 +34,7 @@ type Name = String
 -- | It doesn't carry any useful information.
 data Binding
   = NameBind
-  deriving (Show)
+  deriving (Show, Eq)
 
 data CtxException
   = NotFound
@@ -132,13 +132,3 @@ termSubstTop :: Term -> Term -> Term
 termSubstTop t1 t2 = termShift (-1) $ termSubst 0 (termShift 1 t1) t2
 
 -- * --
-
--- tests
-ctx1, ctx2, ctx3 :: Context
-ctx1 = []
-
-ctx2 = [("x", NameBind)]
-
-ctx3 = [("x", NameBind), ("y", NameBind)]
-
-ctxs = [ctx1, ctx2, ctx3]

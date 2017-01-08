@@ -5,20 +5,20 @@ module Language.Untyped.Eval
   , big
   ) where
 
-import Language.Untyped.Syntax
-import Language.Untyped.Context
-import qualified Language.Untyped.Church as Church
-import Language.Untyped.PrettyPrinting -- testing
-import Printcess.PrettyPrinting
+import qualified Language.Untyped.Church         as Church
+import           Language.Untyped.Context
+import           Language.Untyped.PrettyPrinting
+import           Language.Untyped.Syntax
+import           Printcess.PrettyPrinting
 
 isVal :: Context -> Term -> Bool
 isVal _ (TmAbs _ _) = True
-isVal _ _ = False
+isVal _ _           = False
 
 small :: Context -> Term -> Term
 small ctx (TmApp t1 t2)
   -- E-AppAbs
-  | isVal ctx t2 = let (TmAbs _ t12) = t1
+  | isVal ctx t2 = let (TmAbs t11 t12) = t1
                    in termSubstTop t2 t12
   -- E-App2
   | isVal ctx t1 = let t2' = small ctx t2
@@ -30,15 +30,16 @@ small _ t = t
 
 multi :: Context -> Term -> Term
 multi ctx t = let t' = small ctx t in small ctx t'
+
 e = TmApp (TmApp (TmAbs "t" (TmAbs "f" (TmVar 0))) (TmAbs "t" (TmAbs "f" (TmVar 0)))) (TmAbs "t" (TmAbs "f" (TmVar 1)))
 
-big :: Context -> Term -> Maybe Term
+big :: Context -> Term -> Term
 big = undefined
 
 -- funciones bugueadas pero utiles para testear (?)
 bindings :: Term -> Context
-bindings (TmVar _) = []
-bindings (TmAbs b t1) = (b, NameBind) : bindings t1
+bindings (TmVar _)     = []
+bindings (TmAbs b t1)  = (b, NameBind) : bindings t1
 bindings (TmApp t1 t2) = bindings t1 ++ bindings t2
 
 eval1 :: Term -> Term
