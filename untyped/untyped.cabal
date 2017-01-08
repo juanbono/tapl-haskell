@@ -22,6 +22,7 @@ library
                      , Language.Untyped.Context
                      , Language.Untyped.PrettyPrinting
                      , Language.Untyped.Church
+                     , Language.Untyped.Parser2
                      , REPL
   build-depends:       base            >= 4.7 && < 5
                      , parsec          >= 3.1.10
@@ -31,6 +32,7 @@ library
                      , printcess       >= 0.1.0.0
                      , safe-exceptions >= 0.1.3.0
                      , annihilator     == 0.1.0.0
+                     , mtl             >= 2.2.0
   default-language:    Haskell2010
 
 executable untyped-exe

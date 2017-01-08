@@ -39,10 +39,8 @@ parseAbs = do
   char '\\' <|> char 'λ'
   v <- identifier
   dot
-  ctx <- getState
-  setState $ addName ctx v
+  modifyState (`addName` v)
   term <- parseTerm
-  setState ctx
   return $ TmAbs v term
 
 parseString :: String -> Either ParseError Term

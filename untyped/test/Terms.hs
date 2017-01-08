@@ -3,7 +3,7 @@ module Terms
   , parsedYCombinator
   , parsedSomeAbstraction
   ) where
-import Language.Untyped.Syntax
+import           Language.Untyped.Syntax
 
 parsedIdentity :: Term
 parsedIdentity -- \x.x

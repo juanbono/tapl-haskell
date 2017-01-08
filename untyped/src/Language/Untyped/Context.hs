@@ -7,8 +7,7 @@ Maintainer  : juanbono94@gmail.com
 
 -}
 module Language.Untyped.Context
-  (
-    Context
+  ( Context
   , Binding (..)
   , CtxException (..)
   , Name

@@ -6,7 +6,7 @@ module ParserTest
 import           Language.Untyped.Parser
 import           Language.Untyped.Syntax
 import           Terms
-import Test.Tasty.Discover (hspec, describe, it, shouldBe)
+import           Test.Tasty.Discover     (describe, hspec, it, shouldBe)
 
 stringyIdentity :: String
 stringyIdentity = "\\x.x"

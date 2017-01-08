@@ -54,11 +54,16 @@ printTerm :: Term -> String
 printTerm t = pretty defConfig $ showTerm [] t -- arreglar
 
 options :: [(String, [String] -> Repl ())]
-options = [
-  ("help", help),
-  ("q", const abort),
-  ("single", evalWith $ multi emptyContext)
-  ]
+options
+  = [ ("help" , help)
+    , ("q"    , const abort)
+    , ("small", evalWith $ small emptyContext) -- no tiene que ser contexto vacio
+    , ("multi", evalWith $ multi emptyContext) -- no tiene que ser contexto vacio
+    , ("big"  , error "not implemented")
+    ] -- solucion: que el parseo devuelva una tupla (term, ctx)
+      -- luego llamo a las funciones de evaluacion desarmando la tupla
+      -- (\(t,ctx) -> <eval> ctx t
+      -- el problema estaba en el emptyContext!!!
 
 ini :: Repl ()
 ini = liftIO $ putChunkLn . fore yellow . chunk $ txt
