@@ -19,10 +19,10 @@ module Language.Untyped.Context
   , termSubstTop
   ) where
 
-import           Language.Untyped.Syntax
+import           Control.Exception
 import           Data.Either
 import           Data.Typeable
-import           Control.Exception
+import           Language.Untyped.Syntax
 
 -- == Definitions
 
@@ -81,7 +81,7 @@ fromIndex ctx index
   | length ctx < index = Left NotFound
   | otherwise = Right $ fst (ctx !! index)
 
--- | testeado villero
+-- |
 toIndex :: Context -> Name -> Either CtxException Int
 toIndex [] name = throw $ Unbound name
 toIndex ((y, _):rest) name
@@ -90,26 +90,33 @@ toIndex ((y, _):rest) name
 
 -- * --
 
+--
+removeNames :: Context -> Term -> NamelessTerm
+removeNames = undefined
+
+restoreNames :: Context -> NamelessTerm -> Term
+restoreNames = undefined
+--
 -- == Shifting
 
 -- |
-termMap :: Num t => (t -> Int -> Term) -> t -> Term -> Term
+termMap :: Num t => (t -> Int -> NamelessTerm) -> t -> NamelessTerm -> NamelessTerm
 termMap onvar c term
-  = let walk c (TmVar index)     = onvar c index
-        walk c (TmAbs name term) = TmAbs name (walk (c + 1) term)
-        walk c (TmApp t1 t2)     = TmApp (walk c t1) (walk c t2)
+  = let walk c (NmVar index)     = onvar c index
+        walk c (NmAbs name term) = NmAbs name (walk (c + 1) term)
+        walk c (NmApp t1 t2)     = NmApp (walk c t1) (walk c t2)
     in walk c term
 
 -- |
-termShiftAbove :: Int -> Int -> Term -> Term
+termShiftAbove :: Int -> Int -> NamelessTerm -> NamelessTerm
 termShiftAbove d c term = termMap f c term
   where
     f c x
-      | x >= c = TmVar (x + d)
-      | otherwise = TmVar x
+      | x >= c = NmVar (x + d)
+      | otherwise = NmVar x
 
 -- |
-termShift :: Int -> Term -> Term
+termShift :: Int -> NamelessTerm -> NamelessTerm
 termShift d term = termShiftAbove d 0 term
 
 -- * --
@@ -117,15 +124,15 @@ termShift d term = termShiftAbove d 0 term
 -- == Substitution
 
 -- |
-termSubst :: Int -> Term -> Term -> Term
+termSubst :: Int -> NamelessTerm -> NamelessTerm -> NamelessTerm
 termSubst j t1 t2 = termMap f 0 t2
   where
     f c x
       | x == j + c = termShift c t1
-      | otherwise = TmVar x
+      | otherwise = NmVar x
 
 -- |
-termSubstTop :: Term -> Term -> Term
+termSubstTop :: NamelessTerm -> NamelessTerm -> NamelessTerm
 termSubstTop t1 t2 = termShift (-1) $ termSubst 0 (termShift 1 t1) t2
 
 -- * --

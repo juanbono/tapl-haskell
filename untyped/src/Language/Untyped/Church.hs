@@ -3,62 +3,62 @@ module Language.Untyped.Church where
 import           Language.Untyped.Syntax
 
 -- Church Booleans
-fls :: Term
-fls = TmAbs "t" (TmAbs "f" (TmVar 0))
+fls :: NamelessTerm
+fls = NmAbs "t" (NmAbs "f" (NmVar 0))
 
-tru :: Term
-tru = TmAbs "t" (TmAbs "f" (TmVar 1))
+tru :: NamelessTerm
+tru = NmAbs "t" (NmAbs "f" (NmVar 1))
 
 -- Church Boolean Operations
-test :: Term
-test = TmAbs "l" (TmAbs "m" (TmAbs "n" (TmApp (TmApp (TmVar 2) (TmVar 1)) (TmVar 0))))
+test :: NamelessTerm
+test = NmAbs "l" (NmAbs "m" (NmAbs "n" (NmApp (NmApp (NmVar 2) (NmVar 1)) (NmVar 0))))
 
-and :: Term
-and = TmAbs "b" (TmAbs "c" (TmApp (TmApp (TmVar 1) (TmVar 0)) (TmAbs "t" (TmAbs "f" (TmVar 0)))))
+and :: NamelessTerm
+and = NmAbs "b" (NmAbs "c" (NmApp (NmApp (NmVar 1) (NmVar 0)) (NmAbs "t" (NmAbs "f" (NmVar 0)))))
 
-or :: Term
-or = TmAbs "b" (TmAbs "c" (TmApp (TmApp (TmVar 0) tru) (TmVar 0)))
+or :: NamelessTerm
+or = NmAbs "b" (NmAbs "c" (NmApp (NmApp (NmVar 0) tru) (NmVar 0)))
 
-not :: Term
-not = TmAbs "b" (TmApp (TmApp (TmVar 0) (TmAbs "t" (TmAbs "f" (TmVar 0)))) (TmAbs "t" (TmAbs "f" (TmVar 1))))
+not :: NamelessTerm
+not = NmAbs "b" (NmApp (NmApp (NmVar 0) (NmAbs "t" (NmAbs "f" (NmVar 0)))) (NmAbs "t" (NmAbs "f" (NmVar 1))))
 
 -- Church Pairs
-pair :: Term
-pair = TmAbs "f" (TmAbs "s" (TmAbs "b" (TmApp (TmApp (TmVar 0) (TmVar 2)) (TmVar 1))))
+pair :: NamelessTerm
+pair = NmAbs "f" (NmAbs "s" (NmAbs "b" (NmApp (NmApp (NmVar 0) (NmVar 2)) (NmVar 1))))
 
-fst :: Term
-fst = TmAbs "p" (TmApp (TmVar 0) tru)
+fst :: NamelessTerm
+fst = NmAbs "p" (NmApp (NmVar 0) tru)
 
-snd :: Term
-snd = TmAbs "p" (TmApp (TmVar 0) fls)
+snd :: NamelessTerm
+snd = NmAbs "p" (NmApp (NmVar 0) fls)
 
 -- Church Numerals
-c0, c1, c2, c3 :: Term
-c0 = TmAbs "s" (TmAbs "z" (TmVar 0))
-c1 = TmAbs "s" (TmAbs "z" (TmApp (TmVar 1) (TmVar 0)))
-c2 = TmAbs "s" (TmAbs "z" (TmApp (TmVar 1) (TmApp (TmVar 1) (TmVar 0))))
-c3 = TmAbs "s" (TmAbs "z" (TmApp (TmVar 1) (TmApp (TmVar 1) (TmApp (TmVar 1) (TmVar 0)))))
+c0, c1, c2, c3 :: NamelessTerm
+c0 = NmAbs "s" (NmAbs "z" (NmVar 0))
+c1 = NmAbs "s" (NmAbs "z" (NmApp (NmVar 1) (NmVar 0)))
+c2 = NmAbs "s" (NmAbs "z" (NmApp (NmVar 1) (NmApp (NmVar 1) (NmVar 0))))
+c3 = NmAbs "s" (NmAbs "z" (NmApp (NmVar 1) (NmApp (NmVar 1) (NmApp (NmVar 1) (NmVar 0)))))
 
 -- Operations on Church Numerals
-scc :: Term
-scc = TmAbs "n" (TmAbs "s" (TmAbs "z" (TmApp (TmVar 1) (TmApp (TmApp (TmVar 2) (TmVar 1)) (TmVar 0)))))
+scc :: NamelessTerm
+scc = NmAbs "n" (NmAbs "s" (NmAbs "z" (NmApp (NmVar 1) (NmApp (NmApp (NmVar 2) (NmVar 1)) (NmVar 0)))))
 
-plus :: Term
-plus = TmAbs "m" (TmAbs "n" (TmAbs "s" (TmAbs "z" (TmApp (TmApp (TmVar 3) (TmVar 1)) (TmApp (TmApp (TmVar 2) (TmVar 1)) (TmVar 0))))))
+plus :: NamelessTerm
+plus = NmAbs "m" (NmAbs "n" (NmAbs "s" (NmAbs "z" (NmApp (NmApp (NmVar 3) (NmVar 1)) (NmApp (NmApp (NmVar 2) (NmVar 1)) (NmVar 0))))))
 
-times :: Term
-times = TmAbs "m" (TmAbs "n" (TmAbs "s" (TmAbs "z" (TmApp (TmApp (TmVar 3) (TmApp (TmVar 2) (TmVar 1))) (TmVar 0)))))
+times :: NamelessTerm
+times = NmAbs "m" (NmAbs "n" (NmAbs "s" (NmAbs "z" (NmApp (NmApp (NmVar 3) (NmApp (NmVar 2) (NmVar 1))) (NmVar 0)))))
 
-exp :: Term
-exp = TmAbs "m" (TmAbs "n" (TmApp (TmVar 1) (TmVar 0)))
+exp :: NamelessTerm
+exp = NmAbs "m" (NmAbs "n" (NmApp (NmVar 1) (NmVar 0)))
 
-iszro :: Term
-iszro = TmAbs "m" (TmApp (TmApp (TmVar 0) (TmAbs "x" fls)) tru)
+iszro :: NamelessTerm
+iszro = NmAbs "m" (NmApp (NmApp (NmVar 0) (NmAbs "x" fls)) tru)
 
-pred :: Term
+pred :: NamelessTerm
 pred = undefined
 
-subs :: Term
+subs :: NamelessTerm
 subs = undefined
 
 -- Church Lists
