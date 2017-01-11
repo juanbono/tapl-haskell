@@ -2,6 +2,9 @@ module Language.Untyped.Church where
 
 import           Language.Untyped.Syntax
 
+id :: NamelessTerm
+id = NmAbs "x" (NmVar 0)
+
 -- Church Booleans
 fls :: NamelessTerm
 fls = NmAbs "t" (NmAbs "f" (NmVar 0))

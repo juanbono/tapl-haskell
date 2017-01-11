@@ -1,6 +1,5 @@
 module Language.Untyped.Eval
-  (
-    small
+  ( small
   , multi
   , big
   ) where
@@ -31,8 +30,6 @@ small _ t = t
 multi :: Context -> NamelessTerm -> NamelessTerm
 multi ctx t = let t' = small ctx t in small ctx t'
 
-e = NmApp (NmApp (NmAbs "t" (NmAbs "f" (NmVar 0))) (NmAbs "t" (NmAbs "f" (NmVar 0)))) (NmAbs "t" (NmAbs "f" (NmVar 1)))
-
 big :: Context -> NamelessTerm -> NamelessTerm
 big = undefined
 
@@ -50,8 +47,8 @@ eval2 t = multi (bindings t) t
 
 evalAndPrint1 :: NamelessTerm -> String
 evalAndPrint1 t = let term = eval1 t
-                 in (pretty defConfig . showTerm emptyContext) term
+                  in (pretty defConfig . showTerm emptyContext) term
 
 evalAndPrint2 :: NamelessTerm -> String
 evalAndPrint2 t = let term = eval2 t
-                 in (pretty defConfig . showTerm (bindings term)) term
+                  in (pretty defConfig . showTerm (bindings term)) term
