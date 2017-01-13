@@ -16,13 +16,13 @@ import           Data.List
 type Parser = ParsecT String Context Identity
 
 data ParseResult
-  = PR { term :: Term
+  = PR { term :: NamelessTerm
        , ctx  :: Context
        } deriving (Show, Eq)
 
 parseTerm :: Parser ParseResult
 parseTerm = do
-  pr <- chainl1 parseNonApp $ return (\t1 t2 -> PR (TmApp (term t1) (term t2)) (ctx t1 `union` ctx t2))
+  pr <- chainl1 parseNonApp $ return (\t1 t2 -> PR (NmApp (term t1) (term t2)) (ctx t1 `union` ctx t2))
   let t = term pr
   ctx  <- getState
   return $ PR t ctx
@@ -42,7 +42,7 @@ parseVar = do
   let idx = toIndex ctx var
   case idx of
     Left e  -> error $ show e
-    Right i -> return $ PR (TmVar i) newCtx
+    Right i -> return $ PR (NmVar i) newCtx
 
 parseAbs :: Parser ParseResult
 parseAbs = do
@@ -53,7 +53,7 @@ parseAbs = do
   pr <- parseTerm
   let t = term pr
   ctx <- getState
-  return $ PR (TmAbs v t) ctx
+  return $ PR (NmAbs v t) ctx
 
 parseString :: String -> Either ParseError ParseResult
 parseString = runParser parseTerm emptyContext ""

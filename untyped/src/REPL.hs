@@ -65,7 +65,7 @@ evalWith f = cmdWith (printTerm . f) (fore green) . unwords
 printTerm :: ParseResult -> String
 printTerm (PR term ctx) = pretty defConfig $ showTerm [] term
 
-smallEval :: ParseResult -> Term
+smallEval :: ParseResult -> NamelessTerm
 smallEval (PR t ctx)
   = let t' = small ctx t
     in t'
