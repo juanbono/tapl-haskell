@@ -4,12 +4,11 @@ packages:
 - '.'
 extra-deps:
 - annihilator-0.1.0.0
-- hspec-2.3.2
-- hspec-core-2.3.2
-- hspec-discover-2.3.2
-- hspec-expectations-0.8.2
-- ncurses-0.2.16
-- printcess-0.1.0.2
-- repline-0.1.5.0
-- tasty-discover-1.0.1
-resolver: lts-7.14
+- hspec-2.4.4
+- hspec-core-2.4.4
+- hspec-discover-2.4.4
+- printcess-0.1.0.3
+- repline-0.1.6.0
+- tasty-discover-3.0.2
+- quickcheck-io-0.2.0
+resolver: lts-9-3

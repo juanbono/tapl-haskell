@@ -1,7 +1,20 @@
 flags: {}
+
 extra-package-dbs: []
+
 packages:
 - '.'
+
 extra-deps:
-- repline-0.1.5.0
-resolver: lts-7.5
+- annihilator-0.1.0.0
+- hspec-2.4.4
+- hspec-core-2.4.4
+- hspec-discover-2.4.4
+- printcess-0.1.0.3
+- repline-0.1.6.0
+- tasty-discover-3.0.2
+- quickcheck-io-0.2.0
+- llvm-hs-pure-4.1.0.0
+- llvm-hs-4.2.0
+
+resolver: lts-9.3
